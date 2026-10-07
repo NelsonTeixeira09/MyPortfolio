@@ -1,6 +1,8 @@
 # MyPortfolio
 Personal developer portfolio showcasing my experience, projects and certifications in OutSystems and SAP CAP, with a futuristic 3D design.
 
+Deployed on Netlify: every push to `main` rebuilds the site (settings in `netlify.toml`).
+
 ## Stack
 - **Vite** — dev server and build
 - **Vanilla JS + CSS** — no framework; the page is rendered to static HTML at build time
