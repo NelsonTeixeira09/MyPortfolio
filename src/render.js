@@ -94,6 +94,20 @@ function projectArt(kind, id) {
     });
     nodes.forEach(([x, y]) => (body += `<circle cx="${x}" cy="${y}" r="15" ${faint}/><circle cx="${x}" cy="${y}" r="4" fill="url(#${g})"/>`));
     body += `<path d="M200 82l33 19v38l-33 19-33-19v-38z" ${hot}/><path d="M188 114l-8 6 8 6M212 114l8 6-8 6" fill="none" stroke="#e8f4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+  } else if (kind === 'ai') {
+    const cols = [[110, [80, 120, 160]], [200, [60, 100, 140, 180]], [290, [80, 120, 160]]];
+    for (let c = 0; c < cols.length - 1; c++)
+      for (const y1 of cols[c][1])
+        for (const y2 of cols[c + 1][1])
+          body += `<path d="M${cols[c][0]} ${y1} L${cols[c + 1][0]} ${y2}" stroke="rgba(255,255,255,.08)"/>`;
+    body += `<path class="art-flow" d="M110 120 L200 100 L290 80" fill="none" stroke="url(#${g})" stroke-width="1.6" stroke-dasharray="4 5"/>`;
+    cols.forEach(([x, ys]) =>
+      ys.forEach((y) => {
+        const active = (x === 110 && y === 120) || (x === 200 && y === 100) || (x === 290 && y === 80);
+        body += `<circle cx="${x}" cy="${y}" r="${active ? 9 : 7}" ${active ? hot : faint}/>`;
+      }),
+    );
+    body += `<path d="M330 44 q2 12 14 14 q-12 2 -14 14 q-2 -12 -14 -14 q12 -2 14 -14z" fill="url(#${g})" opacity=".85"/>`;
   } else if (kind === 'cap') {
     ['app', 'srv', 'db'].forEach((label, i) => {
       const y = 62 + i * 46, active = i === 1;

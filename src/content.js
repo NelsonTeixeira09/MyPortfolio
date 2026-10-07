@@ -35,8 +35,8 @@ export const content = {
     paragraphs: [
       "I'm a software developer based in the Azores, Portugal. For around four years, most of my professional work has been building applications with OutSystems — from e-commerce features and integrations to back-office tools and internal employee portals.",
       "Day to day that means OutSystems Reactive web development, connecting systems through REST APIs, improving performance, adding analytics tracking and integrating rich-text editing with CKEditor 5. I've worked on e-commerce, government back-office applications and internal company portals.",
-      "Right now I'm expanding into SAP CAP — learning it and applying it in project work with Node.js, CDS and SAP BTP.",
-      '[Optional: add a personal line — what you enjoy about your work, or the kind of team or project you are looking for next.]',
+      "Right now I'm expanding into SAP CAP: at work I'm building the backend of a project management app integrated with new AI technologies, alongside training and learning projects with Node.js, CDS and SAP BTP.",
+      'I enjoy building applications that solve real problems, and I want to keep growing in both OutSystems development and SAP CAP.',
     ],
     facts: [
       { value: '~4 yrs', label: 'Professional experience' },
@@ -49,49 +49,43 @@ export const content = {
   // Most recent first. Set `learning: true` to mark an entry as learning/practice.
   experience: [
     {
-      role: '[Job title — e.g. OutSystems Developer]',
-      company: '[Company name]',
-      start: '[Month Year]',
+      role: 'SAP CAP Developer — project work',
+      company: 'Axians by AMT',
+      start: 'September 2026',
       end: 'Present',
-      location: '[City / Remote]',
+      location: 'Nonagon, Lagoa, São Miguel · Hybrid',
       summary:
-        'Building OutSystems Reactive web applications across e-commerce, government back-office and internal company portal projects.',
-      highlights: [
-        'E-commerce features and integrations',
-        'Back-office tools and employee portals',
-        'REST APIs, performance improvements and analytics tracking',
-        'CKEditor 5 integrations',
-      ],
-      tags: ['OutSystems Reactive', 'REST APIs', 'CKEditor 5'],
+        'Backend development for a project management app built with SAP CAP and integrated with new AI technologies, alongside SAP CAP training and learning projects.',
+      highlights: ['Project management app backend with SAP CAP', 'Integration with new AI technologies', 'Node.js and CDS'],
+      tags: ['SAP CAP', 'Node.js', 'CDS', 'AI integration'],
     },
     {
-      role: 'SAP CAP — learning & project work',
-      company: '[Company / self-directed]',
-      start: '[Month Year]',
+      role: 'OutSystems Developer',
+      company: 'Axians by AMT',
+      start: 'April 2026',
       end: 'Present',
-      location: '',
-      learning: true,
-      summary:
-        'Learning the SAP Cloud Application Programming Model and applying it in project work.',
-      highlights: ['Working with Node.js, CDS and SAP BTP'],
-      tags: ['SAP CAP', 'Node.js', 'CDS', 'SAP BTP'],
-    },
-    {
-      role: '[Previous role]',
-      company: '[Company name]',
-      start: '[Month Year]',
-      end: '[Month Year]',
-      location: '[City / Remote]',
-      summary: '[Short description of this role — or delete this entry.]',
+      location: 'Nonagon, Lagoa, São Miguel · Hybrid',
+      summary: 'Building OutSystems applications.',
       highlights: [],
-      tags: [],
+      tags: ['OutSystems'],
+    },
+    {
+      role: 'OutSystems Developer',
+      company: 'Azores Hive',
+      start: '2022',
+      end: '2024',
+      location: 'Nonagon, Lagoa, São Miguel · Hybrid',
+      summary:
+        'Developed OutSystems applications, including features for web platforms, and supported the implementation of improvements.',
+      highlights: [],
+      tags: ['OutSystems'],
     },
   ],
 
   /**
    * status:       'professional' | 'learning'
    * confidential: true shows a "Confidential" badge
-   * art:          card illustration — 'commerce' | 'gov' | 'portal' | 'integrations' | 'cap'
+   * art:          card illustration — 'commerce' | 'gov' | 'portal' | 'integrations' | 'ai' | 'cap'
    * link:         optional URL (leave '' to hide the link)
    */
   projects: [
@@ -132,6 +126,15 @@ export const content = {
       summary:
         'Integration work across OutSystems applications: REST APIs, analytics tracking and CKEditor 5 rich-text editing.',
       tags: ['REST APIs', 'Analytics tracking', 'CKEditor 5'],
+      link: '',
+    },
+    {
+      title: 'Project Management App',
+      status: 'professional',
+      confidential: false,
+      art: 'ai',
+      summary: 'Backend for a project management application built with SAP CAP and integrated with new AI technologies.',
+      tags: ['SAP CAP', 'Node.js', 'CDS', 'AI integration'],
       link: '',
     },
     {
@@ -189,9 +192,11 @@ export const content = {
       icon: 'tools',
       description: 'Day-to-day tooling.',
       items: [
-        { name: '[Tool]', level: 'professional' },
-        { name: '[Tool]', level: 'professional' },
-        { name: '[Tool]', level: 'learning' },
+        { name: 'OutSystems Service Studio', level: 'professional' },
+        { name: 'Git', level: 'professional' },
+        { name: 'Postman', level: 'professional' },
+        { name: 'Jira', level: 'professional' },
+        { name: 'SAP Business Application Studio', level: 'learning' },
       ],
     },
   ],
@@ -214,20 +219,20 @@ export const content = {
 
   education: [
     {
-      title: '[Degree / course name]',
-      institution: '[Institution]',
-      period: '[Start year] — [End year]',
-      note: '[Optional: field of study or a short note.]',
+      title: 'Técnico de Sistemas Informáticos — Level 4',
+      institution: 'ENTA, Ponta Delgada',
+      period: '2019 — 2022',
+      note: 'Technical training in computer systems.',
     },
   ],
 
   contact: {
     heading: "Let's talk.",
     text: "Open to conversations about OutSystems, SAP CAP and new projects. The quickest way to reach me is by email.",
-    email: '[your.email@example.com]',
+    email: 'nelsont408@gmail.com',
     links: [
-      { label: 'LinkedIn', icon: 'linkedin', href: 'https://www.linkedin.com/in/[your-profile]', handle: 'linkedin.com/in/[your-profile]' },
-      { label: 'GitHub', icon: 'github', href: 'https://github.com/[your-username]', handle: 'github.com/[your-username]' },
+      { label: 'LinkedIn', icon: 'linkedin', href: 'https://www.linkedin.com/in/nelsontteixeira', handle: 'linkedin.com/in/nelsontteixeira' },
+      { label: 'GitHub', icon: 'github', href: 'https://github.com/NelsonTeixeira09', handle: 'github.com/NelsonTeixeira09' },
     ],
   },
 
