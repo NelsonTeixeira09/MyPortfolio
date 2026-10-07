@@ -207,13 +207,13 @@ export const content = {
       name: 'Associate Developer (ODC)',
       issuer: 'OutSystems',
       issued: '2025-07',
-      credentialUrl: '',
+      credentialUrl: 'https://www.outsystems.com/profile/empdoyaiqi/overview',
     },
     {
       name: 'Associate Reactive Developer',
       issuer: 'OutSystems',
       issued: '2025-01',
-      credentialUrl: '',
+      credentialUrl: 'https://www.outsystems.com/profile/empdoyaiqi/overview',
     },
   ],
 
