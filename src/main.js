@@ -170,30 +170,48 @@ function supportsWebGL() {
 }
 
 const visual = $('[data-hero-visual]');
+const logo = $('[data-logo]');
 const saveData = navigator.connection?.saveData === true;
 
-if (visual && supportsWebGL() && !saveData) {
-  let scene;
+if ((visual || logo) && supportsWebGL() && !saveData) {
+  let scenes = [];
+  const reveal = (el) => () => requestAnimationFrame(() => el.classList.add('is-webgl'));
   const start = () =>
     import('./scene.js')
-      .then(({ initScene }) => {
-        scene = initScene({
-          canvas: $('[data-hero-canvas]', visual),
-          container: visual,
-          anchor: $('[data-orb-anchor]', visual),
-          reducedMotion: motionQuery.matches,
-          onReady: () => requestAnimationFrame(() => visual.classList.add('is-webgl')),
-        });
+      .then(({ initScene, initLogo }) => {
+        const reducedMotion = motionQuery.matches;
+        if (visual)
+          scenes.push(
+            initScene({
+              canvas: $('[data-hero-canvas]', visual),
+              container: visual,
+              anchor: $('[data-orb-anchor]', visual),
+              reducedMotion,
+              onReady: reveal(visual),
+            }),
+          );
+        if (logo)
+          scenes.push(
+            initLogo({
+              canvas: $('[data-logo-canvas]', logo),
+              container: logo,
+              hoverTarget: logo.closest('a') ?? logo,
+              reducedMotion,
+              onReady: reveal(logo),
+            }),
+          );
       })
       .catch((err) => console.warn('3D scene unavailable, using fallback.', err));
 
   if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 1200 });
   else setTimeout(start, 200);
 
-  // Restart the scene if the motion preference changes.
+  // Restart the scenes if the motion preference changes.
   motionQuery.addEventListener('change', () => {
-    scene?.dispose();
-    visual.classList.remove('is-webgl');
+    scenes.forEach((s) => s?.dispose());
+    scenes = [];
+    visual?.classList.remove('is-webgl');
+    logo?.classList.remove('is-webgl');
     start();
   });
 }

@@ -54,9 +54,9 @@ const ICONS = {
 
 function projectArt(kind, id) {
   const g = `art-g-${id}`;
-  const defs = `<defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4de1ff"/><stop offset=".5" stop-color="#3d7bff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>`;
+  const defs = `<defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7a2e"/><stop offset=".5" stop-color="#ff2e4d"/><stop offset="1" stop-color="#c23bff"/></linearGradient></defs>`;
   const faint = 'fill="rgba(255,255,255,.025)" stroke="rgba(255,255,255,.16)"';
-  const hot = `fill="rgba(77,225,255,.06)" stroke="url(#${g})" stroke-width="1.6"`;
+  const hot = `fill="rgba(255,46,77,.07)" stroke="url(#${g})" stroke-width="1.6"`;
   let body = '';
 
   if (kind === 'commerce') {
@@ -77,7 +77,7 @@ function projectArt(kind, id) {
       body += `<path d="M112 ${y - 1}h${w}" stroke="${active ? `url(#${g})` : 'rgba(255,255,255,.18)'}" stroke-width="4" stroke-linecap="round"/>`;
       body += `<path d="M${282} ${y - 1}h28" stroke="rgba(255,255,255,.1)" stroke-width="4" stroke-linecap="round"/>`;
     });
-    body += `<path class="art-flow" d="M345 70 l22 8 v24 c0 18-10 28-22 34 c-12-6-22-16-22-34 v-24z" fill="rgba(139,92,246,.08)" stroke="url(#${g})" stroke-width="1.6" stroke-dasharray="5 5"/>`;
+    body += `<path class="art-flow" d="M345 70 l22 8 v24 c0 18-10 28-22 34 c-12-6-22-16-22-34 v-24z" fill="rgba(194,59,255,.08)" stroke="url(#${g})" stroke-width="1.6" stroke-dasharray="5 5"/>`;
   } else if (kind === 'portal') {
     body += `<rect x="46" y="30" width="308" height="182" rx="14" ${faint}/>`;
     body += `<path d="M46 56h308" stroke="rgba(255,255,255,.12)"/>`;
@@ -93,7 +93,7 @@ function projectArt(kind, id) {
       body += `<path class="art-flow" d="M200 120 Q ${(x + 200) / 2} ${y < 120 ? y + 40 : y - 40} ${x} ${y}" fill="none" stroke="url(#${g})" stroke-width="1.3" stroke-dasharray="3 6" opacity=".8"/>`;
     });
     nodes.forEach(([x, y]) => (body += `<circle cx="${x}" cy="${y}" r="15" ${faint}/><circle cx="${x}" cy="${y}" r="4" fill="url(#${g})"/>`));
-    body += `<path d="M200 82l33 19v38l-33 19-33-19v-38z" ${hot}/><path d="M188 114l-8 6 8 6M212 114l8 6-8 6" fill="none" stroke="#e8f4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+    body += `<path d="M200 82l33 19v38l-33 19-33-19v-38z" ${hot}/><path d="M188 114l-8 6 8 6M212 114l8 6-8 6" fill="none" stroke="#fff0f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
   } else if (kind === 'ai') {
     const cols = [[110, [80, 120, 160]], [200, [60, 100, 140, 180]], [290, [80, 120, 160]]];
     for (let c = 0; c < cols.length - 1; c++)
@@ -112,7 +112,7 @@ function projectArt(kind, id) {
     ['app', 'srv', 'db'].forEach((label, i) => {
       const y = 62 + i * 46, active = i === 1;
       body += `<path d="M200 ${y - 30} L292 ${y} L200 ${y + 30} L108 ${y} Z" ${active ? hot : faint}/>`;
-      body += `<text x="306" y="${y + 4}" fill="${active ? '#4de1ff' : 'rgba(255,255,255,.4)'}" font-family="ui-monospace, monospace" font-size="12">${label}/</text>`;
+      body += `<text x="306" y="${y + 4}" fill="${active ? '#ff5a6e' : 'rgba(255,255,255,.4)'}" font-family="ui-monospace, monospace" font-size="12">${label}/</text>`;
     });
     body += `<path class="art-flow" d="M200 48 V 196" stroke="url(#${g})" stroke-width="1.4" stroke-dasharray="3 5"/>`;
   }
@@ -147,7 +147,7 @@ function header(c) {
 <header class="site-header" data-header>
   <nav class="nav container" aria-label="Primary">
     <a class="brand" href="#top" aria-label="${esc(c.person.name)} — back to top">
-      <span class="brand-mark" aria-hidden="true">NT</span>
+      <span class="brand-logo" aria-hidden="true" data-logo><span class="brand-logo-fallback"></span><canvas class="brand-logo-canvas" data-logo-canvas></canvas></span>
       <span class="brand-name">${esc(c.person.name)}</span>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" data-nav-toggle>
@@ -305,7 +305,7 @@ function credentials(c) {
       (cert, i) => `
           <li class="cred-card" data-reveal style="--i:${i}">
             <span class="cred-badge" aria-hidden="true">
-              <svg viewBox="0 0 64 64"><defs><linearGradient id="cred-g-${i}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4de1ff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><path d="M32 4l24 14v28L32 60 8 46V18z" fill="rgba(77,225,255,.06)" stroke="url(#cred-g-${i})" stroke-width="2"/><path d="M22 32.5l7 7 13-14" fill="none" stroke="#e8f4ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg viewBox="0 0 64 64"><defs><linearGradient id="cred-g-${i}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff2e4d"/><stop offset="1" stop-color="#c23bff"/></linearGradient></defs><path d="M32 4l24 14v28L32 60 8 46V18z" fill="rgba(255,46,77,.07)" stroke="url(#cred-g-${i})" stroke-width="2"/><path d="M22 32.5l7 7 13-14" fill="none" stroke="#fff0f1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <div class="cred-info">
               <p class="cred-issuer">${t(cert.issuer)}</p>
@@ -381,7 +381,7 @@ function footer(c) {
   return `
 <footer class="site-footer">
   <div class="container footer-inner">
-    <p class="footer-brand"><span class="brand-mark" aria-hidden="true">NT</span>${esc(c.person.name)}</p>
+    <p class="footer-brand"><span class="brand-logo" aria-hidden="true"><span class="brand-logo-fallback"></span></span>${esc(c.person.name)}</p>
     <p class="footer-note">© <span data-year>${new Date().getFullYear()}</span> ${esc(c.person.name)}. ${t(c.footer.note)}</p>
     <a class="footer-top" href="#top">Back to top ${ICONS.arrowUp}</a>
   </div>

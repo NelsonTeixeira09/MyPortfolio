@@ -33,9 +33,9 @@ const rgb = (hex) => {
   const n = parseInt(hex.slice(1), 16);
   return new Vector3(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255);
 };
-const CYAN = '#4de1ff';
-const BLUE = '#3d7bff';
-const VIOLET = '#8b5cf6';
+const HOT = '#ff8a3d'; // ember highlight
+const RED = '#ff2e4d'; // primary
+const MAGENTA = '#c23bff';
 
 // 3D simplex noise — Ashima Arts / Stefan Gustavson (MIT).
 const NOISE = /* glsl */ `
@@ -121,7 +121,7 @@ void main(){
   float band = fres * 1.3 + vDisp * 2.6 + vObjNormal.y * 0.3 + uTime * 0.04;
   vec3 irid = mix(uC1, uC3, 0.5 + 0.5 * cos(6.28318 * band));
 
-  vec3 col = vec3(0.01, 0.014, 0.035);              // deep glass body
+  vec3 col = vec3(0.035, 0.008, 0.014);             // deep glass body
   col += grad * 0.16 * (1.0 - fres);                // tinted interior
   col += mix(grad, irid, 0.45) * fres * 1.35;      // glowing rim
 
@@ -136,12 +136,13 @@ void main(){
 const CORE_FRAGMENT = /* glsl */ `
 uniform vec3 uColor;
 uniform float uTime;
+uniform float uStrength;
 varying vec3 vNormal;
 varying vec3 vViewPos;
 void main(){
   float ndv = clamp(dot(normalize(vNormal), normalize(-vViewPos)), 0.0, 1.0);
   float pulse = 0.85 + 0.15 * sin(uTime * 1.3);
-  gl_FragColor = vec4(uColor, pow(ndv, 2.5) * 0.55 * pulse);
+  gl_FragColor = vec4(uColor, pow(ndv, 2.5) * uStrength * pulse);
 }`;
 
 const CORE_VERTEX = /* glsl */ `
@@ -215,14 +216,7 @@ export function initScene({ canvas, container, anchor, reducedMotion, onReady })
   scene.add(root);
 
   /* Orb */
-  const orbUniforms = {
-    uTime: { value: 0 },
-    uAmp: { value: 0.09 },
-    uFreq: { value: 1.3 },
-    uC1: { value: rgb(CYAN) },
-    uC2: { value: rgb(BLUE) },
-    uC3: { value: rgb(VIOLET) },
-  };
+  const orbUniforms = makeOrbUniforms();
   const orb = new Mesh(
     new IcosahedronGeometry(1, small ? 30 : 56),
     new ShaderMaterial({ uniforms: orbUniforms, vertexShader: ORB_VERTEX, fragmentShader: ORB_FRAGMENT, transparent: true }),
@@ -230,7 +224,7 @@ export function initScene({ canvas, container, anchor, reducedMotion, onReady })
   orb.renderOrder = 2;
   rig.add(orb);
 
-  const coreUniforms = { uColor: { value: rgb('#9feaff') }, uTime: orbUniforms.uTime };
+  const coreUniforms = { uColor: { value: rgb('#ffb08a') }, uTime: orbUniforms.uTime, uStrength: { value: 0.55 } };
   const core = new Mesh(
     new IcosahedronGeometry(0.62, 8),
     new ShaderMaterial({ uniforms: coreUniforms, vertexShader: CORE_VERTEX, fragmentShader: CORE_FRAGMENT, ...additive }),
@@ -242,7 +236,7 @@ export function initScene({ canvas, container, anchor, reducedMotion, onReady })
   const halo = new Mesh(
     new PlaneGeometry(6.5, 6.5),
     new ShaderMaterial({
-      uniforms: { uC1: { value: rgb(BLUE) }, uC2: { value: rgb(VIOLET) } },
+      uniforms: { uC1: { value: rgb(RED) }, uC2: { value: rgb(MAGENTA) } },
       vertexShader: UV_VERTEX,
       fragmentShader: HALO_FRAGMENT,
       ...additive,
@@ -255,23 +249,23 @@ export function initScene({ canvas, container, anchor, reducedMotion, onReady })
   /* Geometric shells */
   const shellA = new LineSegments(
     new EdgesGeometry(new IcosahedronGeometry(1.55, 1)),
-    new LineBasicMaterial({ color: new Color(CYAN), opacity: 0.3, ...additive }),
+    new LineBasicMaterial({ color: new Color(RED), opacity: 0.32, ...additive }),
   );
   const shellB = new LineSegments(
     new EdgesGeometry(new DodecahedronGeometry(1.95, 0)),
-    new LineBasicMaterial({ color: new Color(VIOLET), opacity: 0.22, ...additive }),
+    new LineBasicMaterial({ color: new Color(MAGENTA), opacity: 0.22, ...additive }),
   );
   rig.add(shellA, shellB);
 
   // Glowing vertices on the inner shell
   const vertexPositions = dedupe(new IcosahedronGeometry(1.55, 1).getAttribute('position').array);
-  const pointUniforms = { uTime: orbUniforms.uTime, uSize: { value: 70 * dpr }, uColor: { value: rgb('#bdf3ff') } };
+  const pointUniforms = { uTime: orbUniforms.uTime, uSize: { value: 70 * dpr }, uColor: { value: rgb('#ffd0c4') } };
   const shellDots = makePoints(vertexPositions, pointUniforms);
   shellA.add(shellDots);
 
   /* Orbit rings */
-  const ringA = new Mesh(new TorusGeometry(2.35, 0.006, 6, 200), new MeshBasicMaterial({ color: new Color(CYAN), opacity: 0.4, ...additive }));
-  const ringB = new Mesh(new TorusGeometry(2.7, 0.005, 6, 200), new MeshBasicMaterial({ color: new Color(VIOLET), opacity: 0.3, ...additive }));
+  const ringA = new Mesh(new TorusGeometry(2.35, 0.006, 6, 200), new MeshBasicMaterial({ color: new Color(HOT), opacity: 0.4, ...additive }));
+  const ringB = new Mesh(new TorusGeometry(2.7, 0.005, 6, 200), new MeshBasicMaterial({ color: new Color(MAGENTA), opacity: 0.3, ...additive }));
   ringA.rotation.set(1.2, 0.35, 0);
   ringB.rotation.set(1.85, -0.5, 0.3);
   rig.add(ringA, ringB);
@@ -285,7 +279,7 @@ export function initScene({ canvas, container, anchor, reducedMotion, onReady })
     const phi = Math.acos(2 * Math.random() - 1);
     field.set([r * Math.sin(phi) * Math.cos(theta), r * Math.sin(phi) * Math.sin(theta) * 0.7, r * Math.cos(phi) - 1], i * 3);
   }
-  const particles = makePoints(field, { uTime: orbUniforms.uTime, uSize: { value: 38 * dpr }, uColor: { value: rgb('#9fd8ff') } });
+  const particles = makePoints(field, { uTime: orbUniforms.uTime, uSize: { value: 38 * dpr }, uColor: { value: rgb('#ffb3a6') } });
   root.add(particles);
 
   /* Layout: sit the orb over the CSS fallback anchor */
@@ -409,6 +403,121 @@ export function initScene({ canvas, container, anchor, reducedMotion, onReady })
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('pointermove', onPointer);
       document.removeEventListener('visibilitychange', update);
+      renderer.dispose();
+    },
+  };
+}
+
+function makeOrbUniforms() {
+  return {
+    uTime: { value: 0 },
+    uAmp: { value: 0.09 },
+    uFreq: { value: 1.3 },
+    uC1: { value: rgb(HOT) },
+    uC2: { value: rgb(RED) },
+    uC3: { value: rgb(MAGENTA) },
+  };
+}
+
+/**
+ * Header logo: a miniature of the hero orb — glass core, wire shell and a
+ * tilted ring. Spins faster while hovered.
+ */
+export function initLogo({ canvas, container, hoverTarget = container, reducedMotion, onReady }) {
+  let renderer;
+  try {
+    renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true });
+  } catch {
+    return null;
+  }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setClearColor(0x000000, 0);
+  const size = () => canvas.clientWidth || 60;
+  renderer.setSize(size(), size(), false);
+
+  const scene = new Scene();
+  const camera = new PerspectiveCamera(35, 1, 0.1, 50);
+  camera.position.z = 6.2;
+
+  const rig = new Group();
+  rig.rotation.x = 0.25;
+  scene.add(rig);
+
+  const uniforms = makeOrbUniforms();
+  uniforms.uAmp.value = 0.12;
+  uniforms.uFreq.value = 1.6;
+  const orb = new Mesh(
+    new IcosahedronGeometry(1, 20),
+    new ShaderMaterial({ uniforms, vertexShader: ORB_VERTEX, fragmentShader: ORB_FRAGMENT, transparent: true }),
+  );
+  const core = new Mesh(
+    new IcosahedronGeometry(0.85, 6),
+    new ShaderMaterial({
+      uniforms: { uColor: { value: rgb('#ff7a52') }, uTime: uniforms.uTime, uStrength: { value: 1.6 } },
+      vertexShader: CORE_VERTEX,
+      fragmentShader: CORE_FRAGMENT,
+      ...additive,
+    }),
+  );
+  core.renderOrder = 1;
+  orb.renderOrder = 2;
+  orb.scale.setScalar(1.12);
+  const shell = new LineSegments(
+    new EdgesGeometry(new IcosahedronGeometry(1.5, 0)),
+    new LineBasicMaterial({ color: new Color(RED), opacity: 0.75, ...additive }),
+  );
+  const ring = new Mesh(
+    new TorusGeometry(1.75, 0.04, 8, 96),
+    new MeshBasicMaterial({ color: new Color(HOT), opacity: 0.75, ...additive }),
+  );
+  ring.rotation.set(1.2, 0.35, 0);
+  rig.add(core, orb, shell, ring);
+
+  let speed = 1;
+  let targetSpeed = 1;
+  let t = 1.5;
+  const clock = new Clock();
+  const enter = () => (targetSpeed = 4);
+  const leave = () => (targetSpeed = 1);
+  hoverTarget.addEventListener('pointerenter', enter);
+  hoverTarget.addEventListener('pointerleave', leave);
+
+  function frame() {
+    const dt = Math.min(clock.getDelta(), 0.05);
+    speed += (targetSpeed - speed) * 0.06;
+    if (!reducedMotion) t += dt * speed;
+    uniforms.uTime.value = t;
+    rig.rotation.y = t * 0.5;
+    shell.rotation.set(t * 0.3, t * 0.45, 0);
+    ring.rotation.z = t * 0.6;
+    renderer.render(scene, camera);
+  }
+
+  let running = false;
+  const update = () => {
+    const shouldRun = !reducedMotion && !document.hidden;
+    if (shouldRun === running) return;
+    running = shouldRun;
+    renderer.setAnimationLoop(running ? frame : null);
+    if (running) clock.getDelta();
+  };
+  document.addEventListener('visibilitychange', update);
+  canvas.addEventListener('webglcontextlost', (e) => {
+    e.preventDefault();
+    container.classList.remove('is-webgl');
+    renderer.setAnimationLoop(null);
+  });
+
+  frame();
+  update();
+  onReady?.();
+
+  return {
+    dispose() {
+      renderer.setAnimationLoop(null);
+      document.removeEventListener('visibilitychange', update);
+      hoverTarget.removeEventListener('pointerenter', enter);
+      hoverTarget.removeEventListener('pointerleave', leave);
       renderer.dispose();
     },
   };
